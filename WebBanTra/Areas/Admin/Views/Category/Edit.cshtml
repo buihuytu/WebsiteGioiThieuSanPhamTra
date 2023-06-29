@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Cập nhật danh mục sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Cập nhật danh mục sản phẩm</h5>
+        <span style="display:none" id="session">@HttpContext.Current.Session["Admin_ID"].ToString()</span>
+        <div class="button">
+            <button class="btn btn-primary btn-sm" onclick="editCate();">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Lưu
+            </button>
+            <a href="@Url.Action("Index", "Category")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row w-100">
+            <div class="col-md-9">
+                <form action="" method="">
+                    <div id="id" style="display:none;">@ViewBag.Id</div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Tên danh mục</label>
+                        <input id="name" name="" class="form-control" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Tiêu đề SEO</label>
+                        <input id="metaTitle" name="" class="form-control" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Từ khóa SEO</label>
+                        <textarea id="metaKey" name="" class="form-control" type="text"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Mô tả SEO</label>
+                        <textarea id="metaDesc" name="" class="form-control" type="text"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Trạng thái hiển thị</label>
+                        <select name="" id="active" class="form-control">
+                            <option value="1">Hiển thị</option>
+                            <option value="0">Không hiển thị</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Url = 'https://localhost:7015/api/Categories/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                $('#name').val(response.name);
+                $('#slug').val(response.slug);
+                $('#metaTitle').val(response.metaTitle);
+                $('#metaKey').val(response.metaKey);
+                $('#metaDesc').val(response.metaDesc);
+                $("#active").val(response.isActive)
+
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+
+    function editCate() {
+        let category = {
+            "id": $("#id").text(),
+            "name": $("#name").val(),
+            "metaTitle": $("#metaTitle").val(),
+            "metaKey": $("#metaKey").val(),
+            "metaDesc": $("#metaDesc").val(),
+            "isActive": $("#active").val(),
+            "isDelete": "0",
+            //"updatedBy": "1"
+            "updatedBy": $("#session").text()
+        }
+
+        let Url = "https://localhost:7015/api/Categories/id?ID=" + $("#id").text();
+
+        $.ajax({
+            url: Url,
+            method: 'PUT',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'text',
+            data: JSON.stringify(category),
+            success: function (response) {
+                console.log(response);
+                alert("Edit Successfully Category Name: " + $("#name").val());
+                window.location.replace("https://localhost:44367/Admin/Category/Index");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

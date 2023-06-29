@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Xóa liên hệ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Xóa liên hệ</h5>
+        <div class="button">
+            <button href="" class="btn btn-danger btn-sm" onclick="deleteContact();">
+                <i class="far fa-trash-alt"></i>
+                Xóa
+            </button>
+            <a href="./Trash.html" class="btn btn-info btn-sm">
+                <i class="fas fa-sign-out-alt fa-xs"></i>
+                Back To List
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped mt-3">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td id="id">@ViewBag.Id</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td id="fullName"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td id="email"></td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td id="phone"></td>
+                </tr>
+                <tr>
+                    <th>Detail</th>
+                    <td id="detail"></td>
+                </tr>
+                <tr>
+                    <th>Reply</th>
+                    <td id="reply"></td>
+                </tr>
+                <tr>
+                    <th>Is Reply</th>
+                    <td id="isReply"></td>
+                </tr>
+                <tr>
+                    <th>CreatedAt</th>
+                    <td id="createdDate"></td>
+                </tr>
+                <tr>
+                    <th>RepliedBy</th>
+                    <td id="repliedBy"></td>
+                </tr>
+                <tr>
+                    <th>RepliedAt</th>
+                    <td id="repliedDate"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        let Url = 'https://localhost:7015/api/Contacts/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response.isReply == 1) {
+                    $("#isReply").text("Yes");
+                }
+                else {
+                    $("#isReply").text("No");
+                }
+
+                let createdAt, replydAt;
+                if (response.createdDate != null) {
+                    dateCreated = new Date(response.createdDate.trim());
+                    createdAt = dateCreated.toLocaleString("nl-BE");
+                }
+                else {
+                    createdAt = null;
+                }
+                if (response.repliedDate != null) {
+                    dateReplied = new Date(response.repliedDate.trim());
+                    replydAt = dateReplied.toLocaleString("nl-BE");
+                }
+                else {
+                    replydAt = null;
+                }
+                console.log(response);
+                $('#fullName').text(response.fullName);
+                $('#email').text(response.email);
+                $('#phone').text(response.phone);
+                $('#detail').text(response.detail);
+                $('#reply').text(response.reply);
+                $('#createdDate').text(createdAt);
+                $('#repliedBy').text(response.repliedBy);
+                $('#repliedDate').text(replydAt);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+
+    function deleteContact() {
+        var contactId = $("#id").text().trim()
+        var userName = $("#fullName").text().trim()
+
+        var Url = 'https://localhost:7015/api/Contacts/id?id=' + contactId;
+        $.ajax({
+            url: Url,
+            method: 'DELETE',
+            contentType: 'text',
+            dataType: 'text',
+            success: function (response) {
+                console.log(response);
+                alert("Deleted Success Contact of User Name = " + userName);
+                window.location.replace("https://localhost:44367/Admin/Contact/Trash");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

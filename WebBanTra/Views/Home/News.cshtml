@@ -1,0 +1,105 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebBanTra.Models.tblNew>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức</title>
+    <link rel="icon" type="image/x-icon" href="~/Public/Assets/icon/icon-tea-main.ico">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="~/Public/Css/common.css">
+    <link rel="stylesheet" href="~/Public/Css/news.css">
+
+    <style>
+        .pagination a {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container ">
+            <div class="d-flex justify-content-between">
+                <div class="header-logo">
+                    <a href="@Url.Action("Index", "Home")"><img src="~/Public/Assets/Pictures/trang-chu/logophongtra.png" alt=""></a>
+                </div>
+                <div class="header-nav">
+                    <ul class="row">
+                        <li><a href="@Url.Action("Index", "Home")">TRANG CHỦ</a></li>
+                        <li><a href="@Url.Action("Introduction", "Home")">GIỚI THIỆU</a></li>
+                        <li><a href="@Url.Action("Product", "Home")">SẢN PHẨM</a></li>
+                        <li><a href="@Url.Action("News", "Home")">TIN TỨC</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")">LIÊN HỆ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="news">
+        <div class="container">
+            <h2>TIN TỨC</h2>
+            <div class="row">
+                @foreach (var n in Model)
+                {
+                    <div class="col-md-4 col-sm-6">
+                        <div class="news-item">
+                            <img src="~/Public/Admin/Pictures/news/@n.Image" alt="" class="w-100">
+                            <h5><a href="@Url.Action("Posts", "Home", new {n.Slug})">@n.Name</a></h5>
+                            <p>
+                                @n.Summary
+                            </p>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("News", new { page }))
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 col-sm-6">
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")"><img src="~/Public/Assets/Pictures/trang-chu/logophongtra.png" alt=""></a></li>
+                        <li><a href="#">7999-999-999</a></li>
+                        <li><a href="#">trasenbachdiep@gmail.com</a></li>
+                        <li><a href="#">số 12, Quảng An, Hồ Tây, Hà Nội</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <ul>
+                        <li><h4>VỀ CHÚNG TÔI</h4></li>
+                        <li><a href="@Url.Action("Introduction", "Home")">Giới thiệu</a></li>
+                        <li><a href="@Url.Action("Product", "Home")">Sản phẩm</a></li>
+                        <li><a href="@Url.Action("News", "Home")">Tin tức</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <ul>
+                        <li><h4>LIÊN HỆ</h4></li>
+                        <li>
+                            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                        </li>
+                        <li>
+                            Copyright © 2010-2020 <br />
+                            Tra Sen Bach Diep. All right reserved.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

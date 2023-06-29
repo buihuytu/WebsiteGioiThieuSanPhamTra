@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Thùng rác";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thùng rác</h5>
+        <div class="button">
+            <a href="@Url.Action("Index", "Slider")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblSlider" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th style="width: 150px">Hình ảnh</th>
+                    <th style="width: 250px">Tên slider</th>
+                    <th style="width: 400px">Nội dung</th>
+                    <th class="text-center" style="width: 200px">Hoạt động</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllTrashSlider();
+
+    });
+
+    function printTable(sliders) {
+        $("#tblSlider tbody").remove();
+        if ($("#tblSlider tbody").length == 0) {
+            $("#tblSlider").append("<tbody></tbody>");
+        }
+        for (let slider of sliders) {
+            
+            $("#tblSlider tbody").append(
+                `<tr>
+                    <td class="text-center">${slider.id}</td>
+                    <td><img src="/Public/Admin/Pictures/sliders/${slider.image}" alt="" class="img-product" style="width:100%"></td>
+                    <td><a href="/Admin/Slider/Details/${slider.id}">${slider.name}</a></td>
+                    <td>${slider.description}</td>
+                    <td class="text-center">
+                        <a href="/Admin/Slider/ReTrash/${slider.id}" class="btn btn-info" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-rotate-right fa-flip-horizontal"></i>
+                        </a>
+                        <a href="/Admin/Slider/Delete/${slider.id}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+        }
+    }
+
+    function GetAllTrashSlider() {
+        var Url = 'https://localhost:7015/api/Sliders/Trash';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                printTable(response)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

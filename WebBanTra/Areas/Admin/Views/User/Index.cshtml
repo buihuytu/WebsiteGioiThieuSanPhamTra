@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách thành viên";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Quản lý thành viên</h5>
+        <div class="button">
+            <a href="@Url.Action("Create", "User")" class="btn btn-primary btn-sm">
+                <i class="fa-sharp fa-solid fa-plus" style="font-size: 12px;"></i>
+                Thêm mới
+            </a>
+            <a href="@Url.Action("Trash", "User")" class="btn btn-danger btn-sm" id="trash">
+                <i class="far fa-trash-alt"></i>
+                Thùng rác
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblUser" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">STT</th>
+                    <th>ID</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Quyền</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+            
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllUsers();
+
+    });
+
+    function printTable(users) {
+        $("#tblUser tbody").remove();
+        if ($("#tblUser tbody").length == 0) {
+            $("#tblUser").append("<tbody></tbody>");
+        }
+        for (let user of users) {
+            let checkActive = '';
+
+            $("#tblUser tbody").append(
+                `<tr>
+                    <td class="text-center">1</td>
+                    <td>${user.id}</td>
+                    <td><a href=/Admin/User/Details/${user.id}>${user.userName}</a></td>
+                    <td>${user.email}</td>
+                    <td>1</td>
+                    <td class="user-active text-center">Hoạt động</td>
+                    <td class="text-center">
+                        <a href="/Admin/User/Edit/${user.id}" class="btn btn-warning" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="/Admin/User/DelTrash/${user.id}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+        }
+    }
+
+    function GetAllUsers() {
+        var Url = 'https://localhost:7015/api/Users';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                $("#trash").text("Thùng rác (" + response.countTrash + ")");
+
+                printTable(response.list)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

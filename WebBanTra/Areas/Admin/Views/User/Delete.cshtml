@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Xóa người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Xóa người dùng</h5>
+        <div class="button">
+            <button href="" class="btn btn-danger btn-sm" onclick="deleteUser();">
+                <i class="far fa-trash-alt"></i>
+                Xóa
+            </button>
+            <a href="@Url.Action("Trash", "User")" class="btn btn-info btn-sm">
+                <i class="fas fa-sign-out-alt fa-xs"></i>
+                Back To List
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped mt-3">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td id="id">@ViewBag.Id</td>
+                </tr>
+                <tr>
+                    <th>FullName</th>
+                    <td id="fullName"></td>
+                </tr>
+                <tr>
+                    <th>UserName</th>
+                    <td id="userName"></td>
+                </tr>
+                <tr>
+                    <th>PassWord</th>
+                    <td id="password"></td>
+                </tr>
+                <tr>
+                    <th>Avatar</th>
+                    <td id="avatar"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td id="email"></td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td id="phone"></td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td id="address"></td>
+                </tr>
+                <tr>
+                    <th>Role</th>
+                    <td id="role"></td>
+                </tr>
+                <tr>
+                    <th>CreatedAt</th>
+                    <td id="createdAt"></td>
+                </tr>
+                <tr>
+                    <th>CreatedBy</th>
+                    <td id="createdBy"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedAt</th>
+                    <td id="updatedAt"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedBy</th>
+                    <td id="updatedBy"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Url = 'https://localhost:7015/api/Users/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                let createdAt, updatedAt;
+                if (response.createdDate != null) {
+                    dateCreated = new Date(response.createdDate.trim());
+                    createdAt = dateCreated.toLocaleString("nl-BE");
+                }
+                else {
+                    createdAt = null;
+                }
+                if (response.updatedDate != null) {
+                    dateUpdated = new Date(response.updatedDate.trim());
+                    updatedAt = dateUpdated.toLocaleString("nl-BE");
+                }
+                else {
+                    updatedAt = null;
+                }
+
+
+                console.log(response);
+                $('#fullName').text(response.fullName);
+                $('#userName').text(response.userName);
+                $('#password').text(response.password);
+                $('#avatar').append(`<img src="/Public/Admin/Pictures/user/${response.image}" alt="" class="img-product" style="width:500px;height:200px">`);
+                $('#email').text(response.email);
+                $('#phone').text(response.phone);
+                $('#address').text(response.address);
+                $('#role').text(response.role);
+                $('#createdAt').text(createdAt);
+                $('#createdBy').text(response.createdBy);
+                $('#updatedAt').text(updatedAt);
+                $('#updatedBy').text(response.updatedBy);
+
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+
+    function deleteUser() {
+        let userId = $("#id").text().trim();
+        let userName = $("#id").text().trim();
+        let Url = 'https://localhost:7015/api/Users/id?id=' + userId;
+        $.ajax({
+            url: Url,
+            method: 'DELETE',
+            contentType: 'text',
+            dataType: 'text',
+            success: function (response) {
+                console.log(response);
+                alert("Deleted Success User Name = " + userName);
+                window.location.replace("https://localhost:44367/Admin/User/Index");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

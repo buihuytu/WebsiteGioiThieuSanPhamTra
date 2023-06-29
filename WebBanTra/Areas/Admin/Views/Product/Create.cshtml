@@ -1,0 +1,249 @@
+﻿
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thêm sản phẩm</h5>
+        <span style="display:none" id="session">@HttpContext.Current.Session["Admin_ID"].ToString()</span>
+        <div class="button">
+            <button href="" class="btn btn-primary btn-sm" onclick="createProduct();">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Lưu
+            </button>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row w-100">
+            <div class="col-md-9">
+                <form action="" method="">
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Tên sản phẩm</label>
+                        <input id="name" name="" class="form-control" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Tiêu đề SEO</label>
+                        <input id="metaTitle" name="" class="form-control" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Từ khóa SEO</label>
+                        <textarea id="metaKey" name="" class="form-control" type="text"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Mô tả SEO</label>
+                        <textarea id="metaDesc" name="" class="form-control" type="text"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Mô tả sản phẩm</label>
+                        <textarea id="description" name="Description" class="textarea" cols="20" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Chi tiết sản phẩm</label>
+                        <textarea id="detail" name="Detail" class="textarea" cols="20" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label class="mb-2 font-weight-bold" for="">Ảnh đại diện sản phẩm</label>
+                    <div class="">
+                        <input class="control-label" id="image" name="" type="file" value="" accept = "image/*">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Image" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="img">
+
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="mb-2 font-weight-bold">Khối lượng</label>
+                    <input id="mass" name="" class="form-control" type="number" />
+                </div>
+                <div class="mb-3">
+                    <label for="" class="mb-2 font-weight-bold">Giá nhập</label>
+                    <input id="proPrice" name="" class="form-control" type="number" />
+                </div>
+                <div class="mb-3">
+                    <label for="" class="mb-2 font-weight-bold">Giá bán</label>
+                    <input id="price" name="" class="form-control" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label for="" class="mb-2 font-weight-bold">Loại sản phẩm</label>
+                    <select id="cateId" name="" class="form-control">
+                        <option value="">Chọn loại sản phẩm</option>
+                        <option value="1">Trà Ô Long</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="mb-2 font-weight-bold">Trạng thái hiển thị</label>
+                    <select id="active" name="" class="form-control">
+                        <option value="1">Hiển thị</option>
+                        <option value="0">Không hiển thị</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal (Pop-up) -->
+<div class="pop-up" style="display: none;">
+    <div class="pop-up-content">
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading d-flex justify-content-between">
+                <h4>Các ảnh liên quan</h4>
+                <div class="close hide-popup">&times;</div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="mb-2 font-weight-bold" for="">Chọn ảnh</label>
+                    <div class="">
+                        <input class="control-label" id="listImage" name="" type="file" value="" multiple accept = "image/*">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Image" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="d-flex" style="float: right;">
+                    <button type="button" class="btn btn-primary" style="margin: 0 8px;" onclick="saveListImg();">Lưu</button>
+                    <button type="button" class="btn btn-danger hide-popup">Thoát</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var productId;
+    $(document).ready(function () {
+        bindCategory()
+        var modal = $('.pop-up');
+
+        var span = $('.hide-popup');
+        var search = $('.input-group');
+        modal.hide();
+
+
+
+        span.click(function () {
+            modal.hide();
+            search.show();
+        });
+
+        $(window).on('click', function (e) {
+            if ($(e.target).is('.pop-up')) {
+                modal.hide();
+                search.show();
+            }
+        });
+    });
+
+
+    function bindCategory() {
+        var Url = 'https://localhost:7015/api/Categories';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                $("#cateId option[value!='']").each(function () {
+                    $(this).remove();
+                });
+
+                for (let category of response.list) {
+                    $("#cateId").append(`<option value="${category.id}">${category.name}</option>`)
+                }
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+
+    function createProduct() {
+        var fd = new FormData();
+        var file = $('#image').prop('files')[0];
+        fd.append("Name", $('#name').val());
+        fd.append("CateId", $('#cateId').val());
+        fd.append("Mass", $('#mass').val());
+        fd.append("Price", $('#price').val());
+        fd.append("ProPrice", $('#proPrice').val());
+        fd.append("Description", $('#description').val());
+        fd.append("Detail", $('#detail').val());
+        fd.append("MetaTitle", $('#metaTitle').val());
+        fd.append("MetaKey", $('#metaKey').val());
+        fd.append("MetaDesc", $('#metaDesc').val());
+        fd.append("IsActive", $('#active').val());
+        /*fd.append("CreatedBy", 1);
+        fd.append("UpdatedBy", 1);*/
+        fd.append("CreatedBy", $("#session").text());
+        fd.append("UpdatedBy", $("#session").text());
+        fd.append("FileImage", file);
+
+        if ($('#cateId').val() == '') {
+            alert("Vui lòng chọn loại sản phẩm");
+            $(".pop-up").show();
+
+        }
+        else {
+            let Url = "https://localhost:7015/api/Products";
+            $.ajax({
+                url: Url,
+                method: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    alert("Add Successfully Product Name: " + $("#name").val());
+                    productId = response;
+                    $(".pop-up").show();
+                },
+                error: function (errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        }
+
+    }
+
+    function saveListImg() {
+        var fd = new FormData();
+        var files = $('#listImage').prop('files');
+        fd.append("IdProduct", productId);
+        for (let file of files) {
+            fd.append("FileImage", file);
+        }
+        let Url = "https://localhost:7015/api/ProductImages/upload-nhieu-anh";
+        $.ajax({
+            url: Url,
+            method: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                console.log(fd);
+                alert("Add Successfully List Images Product Name: " + $("#name").val());
+                $(".pop-up").hide();
+                window.location.replace("https://localhost:44367/Admin/Product");
+            },
+            error: function (errorMessage) {
+                alert(errorMessage);
+                console.log(fd);
+            }
+        });
+    }
+</script>
+

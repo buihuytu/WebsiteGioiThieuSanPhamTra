@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Chi tiết danh mục sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Chi tiết danh mục sản phẩm</h5>
+        <div class="button">
+            <a href="/Admin/Category/Edit/@ViewBag.Id" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-pen"></i>
+                Sửa
+            </a>
+            <a href="/Admin/Category/DelTrash/@ViewBag.Id" class="btn btn-danger btn-sm">
+                <i class="far fa-trash-alt"></i>
+                Xóa
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped mt-3">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td id="id">@ViewBag.Id</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <th>Slug</th>
+                    <td id="slug"></td>
+                </tr>
+                <tr>
+                    <th>MetaTitle</th>
+                    <td id="metaTitle"></td>
+                </tr>
+                <tr>
+                    <th>MetaKey</th>
+                    <td id="metaKey"></td>
+                </tr>
+                <tr>
+                    <th>MetaDesc</th>
+                    <td id="metaDesc"></td>
+                </tr>
+                <tr>
+                    <th>CreatedAt</th>
+                    <td id="createdAt"></td>
+                </tr>
+                <tr>
+                    <th>CreatedBy</th>
+                    <td id="createdBy"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedAt</th>
+                    <td id="updatedAt"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedBy</th>
+                    <td id="updatedBy"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Url = 'https://localhost:7015/api/Categories/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                let createdAt, updatedAt;
+                if (response.createdDate != null) {
+                    dateCreated = new Date(response.createdDate.trim());
+                    createdAt = dateCreated.toLocaleString("nl-BE");
+                }
+                else {
+                    createdAt = null;
+                }
+                if (response.updatedDate != null) {
+                    dateUpdated = new Date(response.updatedDate.trim());
+                    updatedAt = dateUpdated.toLocaleString("nl-BE");
+                }
+                else {
+                    updatedAt = null;
+                }
+                
+
+                console.log(response);
+                $('#name').text(response.name);
+                $('#slug').text(response.slug);
+                $('#metaTitle').text(response.metaTitle);
+                $('#metaKey').text(response.metaKey);
+                $('#metaDesc').text(response.metaDesc);
+                $('#createdAt').text(createdAt);
+                $('#createdBy').text(response.createdBy);
+                $('#updatedAt').text(updatedAt);
+                $('#updatedBy').text(response.updatedBy);
+
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .pagination {
+        /*display: flex;
+        justify-content: center;*/
+        
+    }
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Danh sách sản phẩm</h5>
+        <div class="button">
+            <a href="@Url.Action("Create", "Product")" class="btn btn-primary btn-sm">
+                <i class="fa-sharp fa-solid fa-plus" style="font-size: 12px;"></i>
+                Thêm mới
+            </a>
+            <a href="@Url.Action("Trash", "Product")" class="btn btn-danger btn-sm" id="trash">
+                <i class="far fa-trash-alt"></i>
+                Thùng rác
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="search" class="form-control" />
+            </div>
+        </div>
+        <table id="tblProduct" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Giá tiền</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="totalPage" style="display:none;"></div>
+        <div class="d-flex w-100 justify-content-between">
+            <div id="showEntry"></div>
+            <div class="pagination">
+                <a id="previous" href="#">&laquo;</a>
+                <div id="numberPage">
+                </div>
+                <a id="next" href="#">&raquo;</a>
+            </div>
+
+        </div>
+    </div>
+    
+
+</div>
+
+<script type="text/javascript">
+    var page = 1;
+    
+    $(document).ready(function () {
+        
+        GetAllProducts(page);
+
+        $("input[type='search']").keyup(function () {
+            let strSearch = $("input[type='search']").val();
+            if (strSearch == "") {
+                GetAllProducts(page);
+            }
+            else {
+                search(strSearch);
+            }
+        })
+        
+    });
+
+    function paging(page) {
+        $("#numberPage a").remove()
+        let totalPage = $("#totalPage").text();
+        for (var i = 1; i <= parseInt(totalPage); i++) {
+            if (i == page) {
+                $("#numberPage").append(`<a id="page" href="" class="active" style="cursor:not-allowed">${i}</a>`)
+            }
+            else {
+                $("#numberPage").append(`<a href="#" onclick="GetAllProducts(${i})">${i}</a>`)
+
+            }
+        }
+        $("#next").click(function () {
+            if (page < parseInt($("#totalPage").text())) {
+                page++;
+                GetAllProducts(page);
+            }
+        })
+        $("#previous").click(function () {
+            if (page > 1) {
+                page--;
+                GetAllProducts(page);
+            }
+        })
+    }
+
+    function printTable(products, totalProduct) {
+        $("#tblProduct tbody").remove();
+        if ($("#tblProduct tbody").length == 0) {
+            $("#tblProduct").append("<tbody></tbody>");
+        }
+        let stt = 1;
+        $("#showEntry").text(`Hiển thị ${products.length} trên ${totalProduct} sản phẩm`);
+        for (let product of products) {
+            let checkActive = '';
+            let money = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.productPrice)
+            if (product.isActive == 1) {
+                checkActive += '<input class="changeStatus" data-id="' + product.productId + '" data-controller="Category" type="checkbox" onClick="status(\'' + product.productId + '\');" checked>';
+            }
+            else {
+                checkActive += '<input class="changeStatus" data-id="' + product.productId + '" data-controller="Category" type="checkbox" onClick="status(\'' + product.productId + '\');" >';
+            }
+            $("#tblProduct tbody").append(
+                `<tr>
+                    <td>${stt}</td>
+                    <td>${product.productId}</td>
+                    <td class="text-center"><img src="/Public/Admin/Pictures/products/${product.productImg}" alt="" class="img-product"></td>
+                    <td><a href="/Admin/Product/Details/${product.productId}">${product.productName}</a></td>
+                    <td>${product.categoryName}</td>
+                    <td class="text-center">${money}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            ${checkActive}
+                            <span class="slider round"></span>
+                        </label>
+                        <a href="/Admin/ProductImages/Index/${product.productId}" class="btn btn-info" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </a>
+                        <a href="/Admin/Product/Edit/${product.productId}" class="btn btn-warning" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="/Admin/Product/DelTrash/${product.productId}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+            stt++;
+        }
+    }
+
+    function GetAllProducts(page) {
+        if (page == 1) {
+            $("#previous").css('cursor', 'not-allowed')
+        }
+        else {
+            $("#previous").css('cursor', 'pointer')
+        }
+        if (page == parseInt($("#totalPage").text())) {
+            $("#next").css('cursor', 'not-allowed')
+        }
+        else {
+            $("#next").css('cursor', 'pointer')
+        }
+        let Url = 'https://localhost:7015/api/Products/GetProductPage/' + page;
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                $("#trash").text("Thùng rác (" + response.countTrash + ")");
+                printTable(response.list, response.countProduct)
+                $("#totalPage").text(`${Math.ceil(response.countProduct / 10)}`)
+                paging(page);
+                
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+
+    function search(str) {
+        let Url = 'https://localhost:7015/api/Products/GetProductByName/' + str;
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                printTable(response, response.length);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+    
+
+    function status(id) {
+
+        $.ajax({
+            url: "/Admin/Product/changeStatus",
+            data: { id: id },
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                let i;
+                $('table > tbody  > tr').each(function (index) {
+
+                    if ($(".changeStatus").eq(index).attr("data-id") == id) {
+                        i = index;
+                    }
+                });
+                alert('Thay đổi trạng thái thành công! id= ' + id)
+                if (res.Status == 1) {
+                    $(".changeStatus").eq(i).prop('checked', true);
+                } else {
+                    $(".changeStatus").eq(i).prop('checked', false);
+                }
+            }
+        });
+    }
+</script>

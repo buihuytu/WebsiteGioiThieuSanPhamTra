@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Thêm Slider";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thêm Slider</h5>
+        <span style="display:none" id="session">@HttpContext.Current.Session["Admin_ID"].ToString()</span>
+        <div class="button">
+            <button onclick="createSlider();" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Lưu
+            </button>
+            <a href="@Url.Action("Index", "Slider")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row w-100">
+            <div class="col-md-9">
+                <form action="" method="">
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Tên tiêu đề</label>
+                        <input id="name" name="" class="form-control" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-2 font-weight-bold" for="">Ảnh Slider</label>
+                        <div class="">
+                            <input class="control-label" id="image" name="" type="file" value="" accept = "image/*">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="Image" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Vị trí hiển thị</label>
+                        <select name="" id="position" class="form-control">
+                            <option value="1">Trang chủ</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Nội dung Slider</label>
+                        <textarea id="description" name="Description" class="form-control" type="text" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Trạng thái hiển thị</label>
+                        <select name="" id="active" class="form-control">
+                            <option value="1">Hiển thị</option>
+                            <option value="0">Không hiển thị</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function createSlider() {
+        var fd = new FormData();
+        var file = $('#image').prop('files')[0];
+        fd.append("Name", $('#name').val());
+        fd.append("Description", $('#description').val());
+        fd.append("Position", $('#position').val());
+        fd.append("IsActive", $('#active').val());
+        /*fd.append("CreatedBy", 1);
+        fd.append("UpdatedBy", 1);*/
+        fd.append("CreatedBy", $("#session").text());
+        fd.append("UpdatedBy", $("#session").text());
+        fd.append("FileImage", file);
+        let Url = "https://localhost:7015/api/Sliders";
+        $.ajax({
+            url: Url,
+            method: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                alert("Add Successfully Slider: " + $("#name").val());
+                window.location.replace("https://localhost:44367/Admin/Slider");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

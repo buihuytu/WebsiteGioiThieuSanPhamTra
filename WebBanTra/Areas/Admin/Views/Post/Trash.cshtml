@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Thùng rác";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thùng rác</h5>
+        <div class="button">
+            <a href="@Url.Action("Index", "Post")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblPostTrash" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Hình ảnh</th>
+                    <th style="width: 480px">Tên bài viết</th>
+                    <th style="width: 300px">Tiêu đề SEO</th>
+                    <th class="text-center" style="width: 200px">Hoạt động</th>
+                </tr>
+            </thead>
+            
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllPostsTrash();
+
+    });
+
+    function printTable(posts) {
+        $("#tblPostTrash tbody").remove();
+        if ($("#tblPostTrash tbody").length == 0) {
+            $("#tblPostTrash").append("<tbody></tbody>");
+        }
+        for (let post of posts) {
+
+            $("#tblPostTrash tbody").append(
+                `<tr>
+                    <td class="text-center">${post.id}</td>
+                    <td><img src="/Public/Admin/Pictures/news/${post.image}" alt="" class="img-product"></td>
+                    <td><a href="/Admin/Post/Details/${post.id}">${post.name}</a></td>
+                    <td>${post.metaTitle}</td>
+                    <td class="text-center">
+                        <a href="/Admin/Post/ReTrash/${post.id}" class="btn btn-info" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-rotate-right fa-flip-horizontal"></i>
+                        </a>
+                        <a href="/Admin/Post/Delete/${post.id}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+        }
+    }
+
+    function GetAllPostsTrash() {
+        var Url = 'https://localhost:7015/api/News/GetTrash';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                printTable(response)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

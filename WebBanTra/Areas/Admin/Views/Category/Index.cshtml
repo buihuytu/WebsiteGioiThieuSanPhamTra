@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Danh mục sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Danh mục sản phẩm</h5>
+        <div class="button">
+            <a href="@Url.Action("Create", "Category")" class="btn btn-primary btn-sm">
+                <i class="fa-sharp fa-solid fa-plus" style="font-size: 12px;"></i>
+                Thêm mới
+            </a>
+            <a href="@Url.Action("Trash", "Category")" id="trash" class="btn btn-danger btn-sm">
+                <i class="far fa-trash-alt"></i>
+                Thùng rác
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblCategory" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Tiêu đề SEO</th>
+                    <th>Ngày tạo</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllCategories();
+
+    });
+
+    function printTable(categories) {
+        $("#tblCategory tbody").remove();
+        if ($("#tblCategory tbody").length == 0) {
+            $("#tblCategory").append("<tbody></tbody>");
+        }
+        for (let category of categories) {
+            var checkActive = '';
+            if (category.isActive == 1) {
+                checkActive += '<input class="changeStatus" data-id="' + category.id + '" data-controller="Category" type="checkbox" onClick="status(\'' + category.id + '\');" checked>';
+            }
+            else {
+                checkActive += '<input class="changeStatus" data-id="' + category.id + '" data-controller="Category" type="checkbox" onClick="status(\'' + category.id + '\');" >';
+            }
+
+            var d = new Date(category.createdDate.trim());
+            createdAt = d.toLocaleString("nl-BE");
+            $("#tblCategory tbody").append(
+                `<tr>
+                    <td class="text-center">${category.id}</td>
+                    <td><a href="/Admin/Category/Details/${category.id}">${category.name}</a></td>
+                    <td>${category.metaTitle}</td>
+                    <td>${createdAt}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            ${checkActive}
+                            <span class="slider round"></span>
+                        </label>
+                        <a href="/Admin/Category/Edit/${category.id}" class="btn btn-warning" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="/Admin/Category/DelTrash/${category.id}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+        }
+    }
+
+    function GetAllCategories() {
+        var Url = 'https://localhost:7015/api/Categories';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                $("#trash").text("Thùng rác (" + response.countTrash + ")");
+
+                printTable(response.list)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+
+    function status(id) {
+
+        $.ajax({
+            url: "/Admin/Category/changeStatus",
+            data: { id: id },
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                var i;
+                $('table > tbody  > tr').each(function (index) {
+
+                    if ($(".changeStatus").eq(index).attr("data-id") == id) {
+                        i = index;
+                    }
+                });
+                alert('Thay đổi trạng thái thành công! id= ' + id)
+                if (res.Status == 1) {
+                    $(".changeStatus").eq(i).prop('checked', true);
+                } else {
+                    $(".changeStatus").eq(i).prop('checked', false);
+                }
+            }
+        });
+    }
+</script>

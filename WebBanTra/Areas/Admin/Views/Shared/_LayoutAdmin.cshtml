@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Web Bán Trà</title>
+    <link rel="icon" type="image/x-icon" href="~/Public/Assets/icon/icon-tea-admin.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="~/Public/Admin/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+
+    <link href="~/Public/Admin/css/summernote-bs4.css" rel="stylesheet" />
+
+    @*<link rel="stylesheet" href="~/Public/Admin/css/all.min.css">*@
+    <link rel="stylesheet" href="~/Public/Admin/css/OverlayScrollbars.min.css">
+    <link href="~/Public/Admin/css/sweetalert2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Public/Admin/css/dataTables.bootstrap4.min.css">
+    <link href="~/Public/Admin/Css/toastr.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Public/Admin/Css/style.css" />
+    <link rel="stylesheet" href="~/Public/Admin/Css/popup.css" />
+    <script src="~/Public/Admin/js/jquery.min.js"></script>
+</head>
+<body>
+
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4 class="brand">
+                <span class="ti-unlink"></span>
+                <span>DashBoard</span>
+            </h4>
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul id="myUL">
+                <li>
+                    <a href="../DashBoard/index.html">
+                        <span class="ti-home"></span>
+                        <span>Trang chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <span class="ti-bag"></span>
+                    <span class="caret">Loại sản phẩm</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "Category")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Create", "Category")"><span>Thêm mới</span></a></li>
+                        <li><a href="@Url.Action("Trash", "Category")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="ti-crown"></span>
+                    <span class="caret">Sản phẩm</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "Product")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Create", "Product")"><span>Thêm mới</span></a></li>
+                        <li><a href="@Url.Action("Trash", "Product")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="ti-book"></span>
+                    <span class="caret">Bài viết</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "Post")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Create", "Post")"><span>Thêm mới</span></a></li>
+                        <li><a href="@Url.Action("Trash", "Post")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="ti-book"></span>
+                    <span class="caret">Slider</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "Slider")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Create", "Slider")"><span>Thêm mới</span></a></li>
+                        <li><a href="@Url.Action("Trash", "Slider")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="ti-comment-alt"></span>
+                    <span class="caret">Liên hệ</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "Contact")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Trash", "Contact")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="ti-user"></span>
+                    <span class="caret">Thành viên</span>
+                    <ul class="nested">
+                        <li><a href="@Url.Action("Index", "User")"><span>Danh sách</span></a></li>
+                        <li><a href="@Url.Action("Create", "User")"><span>Thêm mới</span></a></li>
+                        <li><a href="@Url.Action("Trash", "User")"><span>Thùng rác</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="main-content">
+
+        <header>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
+                        <img src="~/Public/Admin/Pictures/user/@Session["Admin_Images"]" class="img-circle elevation-1" alt="Image" width="35" height="35px" style="margin-top:-5px; border-radius: 50%;">
+                        <span>@Session["Admin_Name"]</span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="min-width: 200px; font-size: 15px; left: inherit; right: 0px;">
+                        <span class="dropdown-item dropdown-header font-weight-bold text-drank d-block">Quản trị viên</span>
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-divider"></div>
+                        <a href="/Admin/Logout" class="dropdown-item dropdown-footer text-left">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </header>
+
+        <main>
+            @RenderBody()
+
+
+        </main>
+
+    </div>
+    <script src="~/Public/Admin/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/Public/Admin/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/Public/Admin/js/adminlte.min.js"></script>
+
+    <script src="~/Public/Admin/js/jquery.dataTables.min.js"></script>
+    <script src="~/Public/Admin/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <script src="~/Public/Admin/js/sweetalert2.min.js"></script>
+    <script src="~/Public/Admin/js/summernote-bs4.min.js"></script>
+
+    <script src="~/Public/Admin/js/toastr.min.js"></script>
+    <script src="~/Public/Admin/js/karma.laclac.min.js"></script>
+    <script>$(function () { $('.textarea').summernote() })</script>
+
+
+    <!-- jQuery library -->
+    <!-- include libraries(jQuery, bootstrap) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
+    </script>
+</body>
+</html>

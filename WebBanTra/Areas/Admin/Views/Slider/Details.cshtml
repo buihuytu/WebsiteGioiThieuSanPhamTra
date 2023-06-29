@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "Chi tiết Slider";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Chi tiết Slider</h5>
+        <div class="button">
+            <a href="/Admin/User/Edit/@ViewBag.Id" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-pen"></i>
+                Sửa
+            </a>
+            <a href="/Admin/User/DelTrash/@ViewBag.Id" class="btn btn-danger btn-sm">
+                <i class="far fa-trash-alt"></i>
+                Xóa
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped mt-3">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td id="id">@ViewBag.Id</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <th>Url</th>
+                    <td id="url"></td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <td id="image"></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td id="description"></td>
+                </tr>
+                <tr>
+                    <th>Position</th>
+                    <td id="position"></td>
+                </tr>
+                <tr>
+                    <th>CreatedAt</th>
+                    <td id="createdAt"></td>
+                </tr>
+                <tr>
+                    <th>CreatedBy</th>
+                    <td id="createdBy"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedAt</th>
+                    <td id="updatedAt"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedBy</th>
+                    <td id="updatedBy"></td>
+                </tr>
+                <tr>
+                    <th>Active</th>
+                    <td id="active"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Url = 'https://localhost:7015/api/Sliders/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                let createdAt, updatedAt;
+                if (response.createdDate != null) {
+                    dateCreated = new Date(response.createdDate.trim());
+                    createdAt = dateCreated.toLocaleString("nl-BE");
+                }
+                else {
+                    createdAt = null;
+                }
+                if (response.updatedDate != null) {
+                    dateUpdated = new Date(response.updatedDate.trim());
+                    updatedAt = dateUpdated.toLocaleString("nl-BE");
+                }
+                else {
+                    updatedAt = null;
+                }
+
+
+                console.log(response);
+                $('#name').text(response.name);
+                $('#url').text(response.url);
+                $('#image').append(`<img src="/Public/Admin/Pictures/sliders/${response.image}" alt="" class="img-product" style="width:500px;height:200px">`);
+                $('#description').text(response.description);
+                $('#position').text(response.position);
+                $('#createdAt').text(createdAt);
+                $('#createdBy').text(response.createdBy);
+                $('#updatedAt').text(updatedAt);
+                $('#updatedBy').text(response.updatedBy);
+                $('#active').text(response.isActive == 1 ? "Yes" : "No");
+
+
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+</script>

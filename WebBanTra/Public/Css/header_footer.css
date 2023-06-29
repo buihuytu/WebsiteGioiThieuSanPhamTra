@@ -1,0 +1,42 @@
+
+.header {
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 999;
+}
+
+.header-nav ul li{
+    margin: 12px 36px 0 36px;
+}
+
+.header-nav ul li a{
+    font-family: 'svn-0';
+    font-size: 18px;
+}
+
+/* footer */
+footer {
+    background-image: url(../Assets/Pictures/trang-chu/fotter.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 20px 0;
+}
+
+footer h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+footer ul li {
+    margin-top: 4px;
+}
+
+footer ul li a i {
+    font-size: 20px;
+    margin-right: 8px;
+}

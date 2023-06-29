@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Thùng rác";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thùng rác</h5>
+        <div class="button">
+            <a href="@Url.Action("Index", "User")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblUser" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>ID</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Quyền</th>
+                    <th>Trạng thái</th>
+                    <th>Hoạt động</th>
+                </tr>
+            </thead>
+            
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllTrashUsers();
+
+    });
+
+    function printTable(users) {
+        $("#tblUser tbody").remove();
+        if ($("#tblUser tbody").length == 0) {
+            $("#tblUser").append("<tbody></tbody>");
+        }
+        for (let user of users) {
+            let checkActive = '';
+
+            $("#tblUser tbody").append(
+                `<tr>
+                    <td class="text-center">1</td>
+                    <td>${user.id}</td>
+                    <td><a href=/Admin/User/Details/${user.id}>${user.userName}</a></td>
+                    <td>${user.email}</td>
+                    <td>1</td>
+                    <td class="user-active">Hoạt động</td>
+                    <td class="text-center">
+                        <a href="/Admin/User/ReTrash/${user.id}" class="btn btn-info" style="color: #fff; margin: 0 4px;">
+                            <i class="fa-solid fa-rotate-right fa-flip-horizontal"></i>
+                        </a>
+                        <a href="/Admin/User/Delete/${user.id}" class="btn btn-danger" style="color: #fff; margin: 0 4px;">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>`
+            );
+        }
+    }
+
+    function GetAllTrashUsers() {
+        var Url = 'https://localhost:7015/api/Users/GetTrash';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+
+                printTable(response)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

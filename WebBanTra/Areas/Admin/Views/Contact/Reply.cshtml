@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Reply";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Reply</h5>
+        <span style="display:none" id="session">@HttpContext.Current.Session["Admin_ID"].ToString()</span>
+        <div class="button">
+            <button id="enableReply" class="btn btn-primary btn-sm" onclick="sendReply();">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Trả lời
+            </button>
+            <a href="@Url.Action("Index", "Contact")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row w-100">
+            <div class="col-md-9">
+                <form action="" method="">
+                    <div id="id" style="display:none;">@ViewBag.Id</div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Nội dung liên hệ</label>
+                        <input id="detail" name="" class="form-control" type="text" disabled />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Trả lời</label>
+                        <textarea id="reply" name="" class="form-control" type="text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form action="">
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Họ và tên</label>
+                        <input id="fullName" name="" class="form-control" type="text" disabled />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Email</label>
+                        <input id="email" name="" class="form-control" type="text" disabled />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2 font-weight-bold">Số điện thoại</label>
+                        <input id="phone" name="" class="form-control" type="text" disabled />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        let Url = 'https://localhost:7015/api/Contacts/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                if (response.isReply == 1) {
+                    $("#enableReply").addClass("disabled");
+                    $("#enableReply").css("cursor", "not-allowed");
+                    $("#reply").attr('disabled', 'disabled');
+                }
+                console.log(response);
+                $('#fullName').val(response.fullName);
+                $('#email').val(response.email);
+                $('#phone').val(response.phone);
+                $('#detail').val(response.detail);
+                $('#reply').val(response.reply);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+
+    function sendReply() {
+        let contact = {
+            "id": $("#id").text(),
+            "fullName": $("#fullName").val(),
+            "email": $("#email").val(),
+            "phone": $("#phone").val(),
+            "detail": $("#detail").val(),
+            "reply": $("#reply").val(),
+            "repliedBy": $("#session").text(),
+            "repliedBy": 1
+        }
+
+        let Url = "https://localhost:7015/api/Contacts/id?ID=" + $("#id").text();
+
+        $.ajax({
+            url: Url,
+            method: 'PUT',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'text',
+            data: JSON.stringify(contact),
+            success: function (response) {
+                console.log(response);
+                alert("Reply Successfully to User Name: " + $("#fullName").val());
+                window.location.replace("https://localhost:44367/Admin/Contact/Index");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

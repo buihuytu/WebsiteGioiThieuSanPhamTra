@@ -1,0 +1,65 @@
+@import url(../Css/common.css);
+
+body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+/* body * {
+    margin: 0;
+    padding: 0;
+} */
+
+.body{
+    margin: 0;
+    padding: 0;
+    margin-top: 100px;
+    width: 100%;
+    height: calc(100vh - 248px);
+    background: url(../Assets/Pictures/lien-he/banner.jpg);
+    background-size:  100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.form{
+    width: 450px;
+    display: block;
+    float: right;
+    margin-top: 40px;
+}
+
+.form .title{
+    font-family: gotham-thin;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-size: 22px;
+}
+
+.form .input{
+    margin-top: 8px;
+}
+
+.form input{
+    border: 2px solid rgb(170, 188, 68);
+    border-radius: 0px;
+    padding: 9px;
+}
+
+.btn-submit{
+    margin-top: 16px;
+}
+
+.btn-submit .t-btn{
+    width: 100px;
+    height: 40px;
+    font-size: 20px;
+    background-color: rgb(137,154,41);
+    color: #ffffff;
+}
+
+footer{
+    position: relative;
+    margin-top: -50px;
+}

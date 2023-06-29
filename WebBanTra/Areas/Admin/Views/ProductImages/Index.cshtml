@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý danh sách ảnh của sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Quản lý danh sách ảnh của sản phẩm</h5>
+        <div id="productId" style="display:none">@ViewBag.Id</div>
+        <div class="button">
+            <button href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter" onclick="addBtn();">
+                <i class="fa-sharp fa-solid fa-plus" style="font-size: 12px;"></i>
+                Thêm mới
+            </button>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <table class="table table-bordered table-striped mt-3" id="tblProductImage">
+            <thead>
+                <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Hình ảnh</th>
+                    <th class="text-center">Tên sản phẩm</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<!-- Modal (Pop-up) -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Các ảnh liên quan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div id="id" style="display: none;">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-2 font-weight-bold" for="">Chọn ảnh</label>
+                        <div class="">
+                            <input class="control-label" id="listImage" name="" type="file" value="" multiple accept = "image/*">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="Image" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
+                <button id="saveBtn" type="button" class="btn btn-primary" onclick="activityClick();">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var imageId;
+    $(document).ready(function () {
+        GetListImage();
+
+    });
+
+    function printTable(images) {
+        $("#tblProductImage tbody").remove();
+        if ($("#tblProductImage tbody").length == 0) {
+            $("#tblProductImage").append("<tbody></tbody>");
+        }
+        let stt = 1;
+        for (let image of images) {
+            $("#tblProductImage tbody").append(
+                `<tr>
+                    <td class="text-center">${stt}</td>
+                    <td class="text-center">${image.id}</td>
+                    <td class="text-center"><img src="/Public/Admin/Pictures/product-images/${image.name}" alt="" class="img-product" style="width:120px;height:120px"></td>
+                    <td id="name" class="text-center">${image.nameProduct}</td>
+                    <td class="text-center">
+                        <button class="btn btn-warning" style="color: #fff; margin: 0 4px;" data-toggle="modal" data-target="#exampleModalCenter" onclick="editBtn('${image.id}');">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button href="" class="btn btn-danger" style="color: #fff; margin: 0 4px;" onclick="deleteImage('${image.id}');">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>`
+            );
+            stt++;
+        }
+    }
+
+    function GetListImage() {
+        var Url = 'https://localhost:7015/api/ProductImages/productId?productId=' + $("#productId").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                printTable(response)
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+
+    function editBtn(id) {
+        imageId = id;
+        $("#saveBtn").text("Sửa");
+    }
+
+    function addBtn() {
+        $("#saveBtn").text("Thêm mới");
+    }
+
+    function activityClick() {
+        if ($("#saveBtn").text() == "Thêm mới") {
+            InsertProduct();
+            //alert("Thêm mới");
+        }
+        else {
+            let productId = $("#productId").text();
+
+            EditProduct(productId, imageId);
+            //alert(`productId: ${productId} - imageId: ${imageId}`)
+        }
+    }
+
+    function InsertProduct() {
+        var fd = new FormData();
+        var files = $('#listImage').prop('files');
+        fd.append("IdProduct", $("#productId").text());
+        for (let file of files) {
+            fd.append("FileImage", file);
+        }
+        let Url = "https://localhost:7015/api/ProductImages/upload-nhieu-anh";
+        $.ajax({
+            url: Url,
+            method: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                console.log(fd);
+                alert("Add Successfully Images Product Name: " + $("#name").text());
+                $(".modal").hide();
+                GetListImage();
+            },
+            error: function (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    }
+
+    function EditProduct() {
+        
+        var fd = new FormData();
+        var file = $('#listImage').prop('files')[0];
+        fd.append("IdProduct", $("#productId").text());
+        fd.append("FileImage", file);
+        let Url = "https://localhost:7015/api/ProductImages/id?ID=" + imageId;
+        $.ajax({
+            url: Url,
+            method: 'PUT',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                console.log(fd);
+                alert("Edit Successfully Image Id = " + imageId);
+                $(".modal").hide();
+                GetListImage();
+            },
+            error: function (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    }
+
+    function deleteImage(imageId) {
+        let Url = 'https://localhost:7015/api/ProductImages/productId/imageId?productId=' + $("#productId").text() + '&imageId=' + imageId;
+        $.ajax({
+            url: Url,
+            method: 'DELETE',
+            contentType: 'text',
+            dataType: 'text',
+            success: function (response) {
+                console.log(response);
+                alert("Deleted Success Image Id:" + imageId);
+                GetListImage();
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

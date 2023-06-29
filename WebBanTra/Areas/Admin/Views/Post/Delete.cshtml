@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Xóa bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Xóa bài viết</h5>
+        <div class="button">
+            <butotn class="btn btn-danger btn-sm" onclick="deletePost();">
+                <i class="far fa-trash-alt"></i>
+                Xóa
+            </butotn>
+            <a href="@Url.Action("Trash", "Post")" class="btn btn-info btn-sm">
+                <i class="fas fa-sign-out-alt fa-xs"></i>
+                Back To List
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped mt-3">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td id="id">@ViewBag.Id</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <th>Slug</th>
+                    <td id="slug"></td>
+                </tr>
+                <tr>
+                    <th>Summary</th>
+                    <td id="summary"></td>
+                </tr>
+                <tr>
+                    <th>Detail</th>
+                    <td id="detail"></td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <td id="image"></td>
+                </tr>
+                <tr>
+                    <th>MetaTitle</th>
+                    <td id="metaTitle"></td>
+                </tr>
+                <tr>
+                    <th>MetaKey</th>
+                    <td id="metaKey"></td>
+                </tr>
+                <tr>
+                    <th>MetaDesc</th>
+                    <td id="metaDesc"></td>
+                </tr>
+                <tr>
+                    <th>CreatedAt</th>
+                    <td id="createdAt"></td>
+                </tr>
+                <tr>
+                    <th>CreatedBy</th>
+                    <td id="createdBy"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedAt</th>
+                    <td id="updatedAt"></td>
+                </tr>
+                <tr>
+                    <th>UpdatedBy</th>
+                    <td id="updatedBy"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Url = 'https://localhost:7015/api/News/id?id=' + $("#id").text();
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                let createdAt, updatedAt;
+                if (response.createdDate != null) {
+                    dateCreated = new Date(response.createdDate.trim());
+                    createdAt = dateCreated.toLocaleString("nl-BE");
+                }
+                else {
+                    createdAt = null;
+                }
+                if (response.updatedDate != null) {
+                    dateUpdated = new Date(response.updatedDate.trim());
+                    updatedAt = dateUpdated.toLocaleString("nl-BE");
+                }
+                else {
+                    updatedAt = null;
+                }
+
+
+                console.log(response);
+                $('#name').text(response.name);
+                $('#slug').text(response.slug);
+                $('#summary').text(response.summary);
+                $('#detail').append(response.detail);
+                $('#image').append(`<img src="/Public/Admin/Pictures/news/${response.image}" alt="" class="img-product" style="width:500px;height:200px">`);
+                $('#metaTitle').text(response.metaTitle);
+                $('#metaKey').text(response.metaKey);
+                $('#metaDesc').text(response.metaDesc);
+                $('#createdAt').text(createdAt);
+                $('#createdBy').text(response.createdBy);
+                $('#updatedAt').text(updatedAt);
+                $('#updatedBy').text(response.updatedBy);
+
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    });
+
+    function deletePost() {
+        let postId = $("#id").text().trim();
+        let postName = $("#name").text().trim();
+        let Url = 'https://localhost:7015/api/News/id?id=' + postId;
+        $.ajax({
+            url: Url,
+            method: 'DELETE',
+            contentType: 'text',
+            dataType: 'text',
+            success: function (response) {
+                console.log(response);
+                alert("Deleted Success Post Title: " + postName);
+                window.location.replace("https://localhost:44367/Admin/Post/Index");
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Liên hệ</h5>
+        <div class="button">
+            <a href="@Url.Action("Trash", "Contact")" class="btn btn-danger btn-sm" id="trash">
+                <i class="far fa-trash-alt"></i>
+                Thùng rác
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblContact" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Tiêu đề liên hệ</th>
+                    <th>Email</th>
+                    <th>Điện thoại</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllContacts();
+    });
+
+    function printTable(contacts) {
+        $("#tblContact tbody").remove();
+        if ($("#tblContact tbody").length == 0) {
+            $("#tblContact").append("<tbody></tbody>");
+        }
+
+        for (const contact of contacts) {
+            var status = '';
+            var action = '';
+            if (contact.isReply == 1) {
+                status += `<div class="badge badge-secondary">
+                    Đã trả lời
+                </div>`;
+                action += `<a class="btn btn-secondary btn-sm" href="/Admin/Contact/Reply/${contact.id}" data-toggle="tooltip" data-placement="top" title="Xem">
+                    Đã trả lời
+                </a>`;
+            }
+            else {
+                status += `<div class="badge badge-success">
+                    Chưa trả lời
+                </div>`;
+                action += `<a class="btn btn-info btn-sm" href="/Admin/Contact/Reply/${contact.id}" data-toggle="tooltip" data-placement="top" title="Trả lời ${contact.fullname}">
+                    <i class="fas fa-edit"></i> Trả lời
+                </a>`;
+            }
+
+            $("#tblContact tbody").append(
+                `<tr>
+                    <td class="text-center">${contact.id}</td>
+                    <td>${contact.fullName}</td>
+                    <td>${contact.email}</td>
+                    <td>${contact.phone}</td>
+                    <td class="text-center">
+                        ${status}
+                    </td>
+                    <td class="text-center">
+                        ${action}
+                        <div type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Xóa liên hệ">
+                            <a href="/Admin/Contact/DelTrash/${contact.id}" class="text-white"><i class="far fa-trash-alt"></i></a>
+                        </div>
+                        
+                    </td>
+                </tr>`
+            )
+        }
+    };
+
+    function GetAllContacts() {
+        var Url = 'https://localhost:7015/api/Contacts';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                $("#trash").text("Thùng rác (" + response.countTrash + ")");
+                printTable(response.list);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

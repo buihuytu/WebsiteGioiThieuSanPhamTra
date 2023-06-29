@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Thùng rác";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5 class="h5-title">Thùng rác</h5>
+        <div class="button">
+            <a href="@Url.Action("Index", "Contact")" class="btn btn-danger btn-sm">
+                <i class="fa-solid fa-door-open"></i>
+                Thoát
+            </a>
+        </div>
+    </div>
+    <div class="card-body flex-column">
+        <div class="search-box">
+            <div class="view-pageSize d-flex align-items-center">
+                <span>Xem</span>
+                <select name="" id="" class="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>mục</span>
+            </div>
+            <div class="d-flex ml-3">
+                <label for="" class="text-nowrap">Tìm kiếm</label>
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+        <table id="tblContact" class="table table-bordered table-striped mt-3">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Tiêu đề liên hệ</th>
+                    <th>Email</th>
+                    <th>Điện thoại</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Hoạt động</th>
+                </tr>
+            </thead>
+            
+        </table>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetAllContacts();
+    });
+
+    function printTable(contacts) {
+        $("#tblContact tbody").remove();
+        if ($("#tblContact tbody").length == 0) {
+            $("#tblContact").append("<tbody></tbody>");
+        }
+
+        for (const contact of contacts) {
+            var status = '';
+            if (contact.isReply == 1) {
+                status += `<div class="badge badge-secondary">
+                    Đã trả lời
+                </div>`;
+            }
+            else {
+                status += `<div class="badge badge-success">
+                    Chưa trả lời
+                </div>`;
+            }
+
+            $("#tblContact tbody").append(
+                `<tr>
+                    <td class="text-center">${contact.id}</td>
+                    <td>${contact.fullName}</td>
+                    <td>${contact.email}</td>
+                    <td>${contact.phone}</td>
+                    <td class="text-center">
+                        ${status}
+                    </td>
+                    <td class="text-center">
+                        <div type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Khôi phục">
+                            <a href="/Admin/Contact/ReTrash/${contact.id}" class="text-white"><i class="fas fa-undo-alt"></i></a>
+                        </div>
+                        <div type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Xóa vĩnh viễn">
+                            <a href="/Admin/Contact/Delete/${contact.id}" class="text-white"><i class="far fa-trash-alt"></i></a>
+                        </div>
+                    </td>
+                </tr>`
+            )
+        }
+    };
+
+    function GetAllContacts() {
+        var Url = 'https://localhost:7015/api/Contacts/Trash';
+        $.ajax({
+            url: Url,
+            method: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            success: function (response) {
+                console.log(response);
+                printTable(response);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    };
+</script>

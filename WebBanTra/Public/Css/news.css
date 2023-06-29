@@ -1,0 +1,32 @@
+.news {
+    background-image: url(../Assets/Pictures/tin-tuc/background-tintuc.png);
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding-top: 200px;
+}
+
+.news-item {
+    width: 90%;
+    margin: 40px auto 0 auto;
+}
+
+.news-item h5 { 
+    margin-top: 12px;
+    height: 44px;
+}
+
+.news-item h5 a {
+    color: rgb(170, 188, 68);
+}
+
+.news-item h5 a:hover { opacity: 0.8;}
+
+.news-item p {
+    text-align: justify;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}

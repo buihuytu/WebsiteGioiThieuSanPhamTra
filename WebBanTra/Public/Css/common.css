@@ -1,0 +1,104 @@
+@import url(./header_footer.css);
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'svn-0';
+}
+
+@font-face {
+    font-family: 'glyphicons-halflings-regular';
+    src: url(../Assets/fonts/glyphicons-halflings-regular.ttf);
+}
+
+@font-face {
+    font-family: 'fontawesome-webfont';
+    src: url(../Assets/fonts/fontawesome-webfont.ttf);
+}
+
+@font-face {
+    font-family: 'gotham-medium';
+    src: url(../Assets/fonts/Gotham-Medium.otf);
+}
+
+@font-face {
+    font-family: 'gotham-thin';
+    src: url(../Assets/fonts/Gotham-Thin.otf);
+}
+
+@font-face {
+    font-family: 'gotham-ultra';
+    src: url(../Assets/fonts/Gotham-Ultra.otf);
+}
+
+@font-face {
+    font-family: 'svn-beauty';
+    src: url(../Assets/fonts/SVN-Artful_Beauty.ttf);
+}
+@font-face {
+    font-family: 'svn-0';
+    src: url(../Assets/fonts/SVN-Athena_0.ttf);
+}
+
+ul {
+    text-decoration: none;
+    list-style: none;
+}
+
+a { color: black;}
+
+a:hover {
+    color: rgb(170, 188, 68);
+    text-decoration: none;
+}
+
+.btn-green {
+    background-color: rgb(170, 188, 68);
+    color: #000;
+    padding: 8px 22px;
+    border: none;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+h2 {
+    font-weight: bold;
+    text-align: center;
+}
+
+.nav ul { display: flex;}
+
+.nav ul li a { color: rgb(185, 185, 185);}
+
+.nav ul li a:hover { color: rgb(170, 188, 68);}
+
+.nav ul li i { 
+    margin: 0 8px; 
+    color: rgb(203, 203, 203);
+    font-size: 12px;
+} 
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    margin-bottom: 120px;
+}
+
+.pagination ul {
+    display: flex;
+}
+
+.pagination ul li a {
+    padding: 0 8px 8px 8px;
+    border: 1px solid #000;
+    margin: 4px;
+    border-radius: 8px;
+}
+
+.pagination ul li a:hover {
+    border-color: rgb(170, 188, 68);
+}

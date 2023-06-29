@@ -1,0 +1,165 @@
+.bg-detail {
+    background-image: url(../Assets/Pictures/chitietsanpham/bg-chitiet.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-top: 140px;
+    padding-bottom: 80px;
+}
+
+.h2-detail {
+    font-weight: normal;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.product-detail {
+    margin-top: 40px;
+}
+
+.detail-content h2 {
+    font-weight: normal;
+    text-align: left;
+}
+
+.detail-price {
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.detail-price small {
+    font-size: 18px;
+    margin-left: 4px;
+}
+
+.detail-description {
+    text-align: justify;
+}
+
+.safety-rating {
+    width: 60%;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.rating {
+    margin-top: 20px;
+}
+
+.rating i {
+    color: rgb(170, 188, 68);
+    font-size: 12px;
+}
+
+.rating p {
+    margin-top: -8px;
+    margin-left: 16px;
+}
+
+.instruction {
+    margin-top: 60px;
+}
+
+.instruction-item {
+    margin-left: 35%;
+}
+
+.instruction i {
+    color: rgb(170, 188, 68);
+    margin-top: 6px;
+    margin-right: 16px;
+}
+
+.instruction-item p {
+    font-weight: bold;
+}
+
+.instruction {
+    margin-bottom: 80px;
+}
+
+.product-item {
+    margin: 60px;
+    position: relative;
+}
+
+.product-price {
+    font-size: 20px;
+    margin-top: 4px;
+    font-family: 'Times New Roman', serif;
+}
+
+h5 { text-align: center; margin-top: 8px;}
+
+small { font-size: 12px}
+
+select {
+    border: none; 
+    padding: 8px;
+    font-size: 14px;
+    margin-top: -8px;
+    font-family: 'Times New Roman', serif;
+}
+
+.product-rate {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+}
+
+.product-rate i {
+    font-size: 10px;
+    color: rgb(170, 188, 68);
+}
+
+.product-rate p {
+    font-size: 14px;
+    margin-top: -8px;
+    margin-left: 2px;
+}
+
+.new-product {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+}
+
+.new-product p {
+    background-color: rgb(170, 188, 68);
+    padding: 2px 12px;
+    font-size: 12px;
+}
+
+.btnNext-prod {
+    position: absolute;
+    top: 40%;
+    right: -5%;
+    cursor: pointer;
+}
+
+.btnPrev-prod {
+    position: absolute;
+    top: 40%;
+    left: -5%;
+    cursor: pointer;
+}
+
+.btnNext-slider {
+    position: absolute;
+    top: 104%;
+    left: 25%;
+    cursor: pointer;
+    transform: rotate(90deg);
+}
+
+.btnPrev-slider {
+    position: absolute;
+    bottom: 104%;
+    left: 25%;
+    transform: rotate(90deg);
+    cursor: pointer;       
+}
+
+.slider-detail {
+    margin-top: 50px;
+}

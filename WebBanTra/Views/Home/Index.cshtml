@@ -1,0 +1,221 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <link rel="icon" type="image/x-icon" href="~/Public/Assets/icon/icon-tea-main.ico">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Slick slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="~/Public/Css/common.css">
+    <link rel="stylesheet" href="~/Public/Css/index.css">
+    <style>
+        .btn-buynow:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container ">
+            <div class="d-flex justify-content-between">
+                <div class="header-logo">
+                    <a href="@Url.Action("Index", "Home")"><img src="~/Public/Assets/Pictures/trang-chu/logophongtra.png" alt=""></a>
+                </div>
+                <div class="header-nav">
+                    <ul class="row">
+                        <li><a href="@Url.Action("Index", "Home")">TRANG CHỦ</a></li>
+                        <li><a href="@Url.Action("Introduction", "Home")">GIỚI THIỆU</a></li>
+                        <li><a href="@Url.Action("Product", "Home")">SẢN PHẨM</a></li>
+                        <li><a href="@Url.Action("News", "Home")">TIN TỨC</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")">LIÊN HỆ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section>
+        <div class="banner-slider">
+            @foreach (var s in ViewBag.Slider)
+            {
+                <div class="banner-item">
+                    <img src="~/Public/Admin/Pictures/sliders/@s.Image" alt="" class="w-100">
+                    <div class="banner-content">
+                        <h5>@s.Name</h5>
+                        <img src="~/Public/Assets/Pictures/trang-chu/tinhhoaamthuc.png" alt="" class="w-75">
+                        <p style="width: 400px">
+                            @s.Description
+                        </p>
+                        <a href="@Url.Action("Product", "Home")" class="btn-green mt-3 btn-buynow">THỬ NGAY</a>
+                    </div>
+                </div>
+            }
+            
+        </div>
+    </section>
+
+    <!-- outstanding product -->
+    <section class="product">
+        <img src="~/Public/Assets/Pictures/trang-chu/product-la.png" alt="" class="bg-la">
+
+        <div class="container">
+            <div class="outstanding-product">
+                <h2>SẢN PHẨM NỔI BẬT</h2>
+                <div class="product-slider">
+                    @foreach (var p in ViewBag.PopularProduct)
+                    {
+                        <div class="product-item">
+                            <img src="~/Public/Admin/Pictures/products/@p.Image" alt="" class="w-100" style="height:200px">
+                            <h6 class="text-center mt-3"><a href="@Url.Action("ProductDetail", "Home", new {@p.Slug})">@p.Name</a></h6>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- introduce -->
+    <section style="position: relative;">
+        <img src="~/Public/Assets/Pictures/trang-chu/product-sen.png" alt="" class="bg-sen">
+        <div class="introduce">
+            <div class="container">
+                <h2>GIỚI THIỆU</h2>
+                <div class="introduce-content col-md-8 col-sm-12">
+                    <img src="~/Public/Assets/Pictures/trang-chu/traxanhbachdiep.png" alt="" class="w-50">
+                    <p class="col-md-6">
+                        Trà ướp Sen Bách Diệp - tinh hoa văn hóa Hà Thành là sự hòa quyện tuyệt vời giữa
+                        hương thơm ngan ngát của bông sen Bách diệp Hồ Tây và vị đậm đà của trà Tân Cương
+                        Thái Nguyên. Qua đôi bàn tay tài hoa và bí quyết nghề mật truyền nhiều đời của người
+                        thợ trà Thăng Long, tạo ra thức quả tinh túy, kết tinh văn hóa ngàn năm Thăng long - Hà Nội.
+                    </p>
+                    <a class="btn-green ml-4 mt-2 btn-buynow" href="@Url.Action("News", "Home")">ĐỌC THÊM</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- tea ceremony artist -->
+    <section class="artist">
+        <h2 style="padding-top: 20px;">NGHỆ NHÂN TRÀ ĐẠO</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-4 artist-item">
+                    <img src="~/Public/Assets/Pictures/trang-chu/professional-tea-1.png" alt="" class="w-100">
+                    <h6>Nn. Nguyễn Cao Sơn</h6>
+                    <p>
+                        Nguyễn Cao Sơn được chọn làm đại diện quảng bá văn hóa
+                        Trà Việt tại ngôi nhà di sản 87 Mã Mây, Hà Nội.
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-4 artist-item">
+                    <img src="~/Public/Assets/Pictures/trang-chu/professional-tea-2.png" alt="" class="w-100">
+                    <h6>Nn. Hướng Anh Sướng</h6>
+                    <p>
+                        Truyền nhân đời thứ 6 của dòng trà Trường Xuân, Hà Nội chia
+                        sẻ về nghệ thuật trà đạo, lĩnh vực mà anh dành hơn nửa cuộc
+                        đời nghiên cứu một cách đam mê.
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-4 artist-item">
+                    <img src="~/Public/Assets/Pictures/trang-chu/professional-tea-3.png" alt="" class="w-100">
+                    <h6>Nn. Nguyễn Thị Dần</h6>
+                    <p>
+                        Vẫn tự tay chọn hoa, tách gạo, thực hiện từng công đoạn ướp
+                        trà sen. Cũng chính bởi nghiện trà, bởi yêu nghề nên cô thiếu
+                        nữ Hà Thành năm xưa vẫn say hương vị trà sen Tây Hồ.
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-4 artist-item">
+                    <img src="~/Public/Assets/Pictures/trang-chu/professional-tea-4.png" alt="" class="w-100">
+                    <h6>Nn. Nguyễn Hoài Linh</h6>
+                    <p>
+                        Vô địch toàn thế giới trong cuộc thi Tea Master Cup International
+                        2018 về pha trà được tổ chức tại Huế.
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-4 artist-item">
+                    <img src="~/Public/Assets/Pictures/trang-chu/professional-tea-5.png" alt="" class="w-100">
+                    <h6>Nn. Viên Trân</h6>
+                    <p>
+                        Sinh ra và lớn lên trong một gia đình quý tộc phong kiến,
+                        trong một môi trường mà việc uống trà và trà cực ngon, cực
+                        thượng hạng là điều không bao giờ thiếu trong nhà.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Buy now -->
+    <section class="buy-now">
+        <div class="container">
+            <h2>MUA NGAY</h2>
+            <div class="row">
+                <div class="col-md-8 col-sm-10">
+                    <input type="text" placeholder="Số điện thoại/Email">
+                </div>
+                <div class="col-md-4 col-sm-2">
+                    <button class="btn-green btn-send">GỬI</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 col-sm-6">
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Home")"><img src="~/Public/Assets/Pictures/trang-chu/logophongtra.png" alt=""></a></li>
+                        <li><a href="#">7999-999-999</a></li>
+                        <li><a href="#">trasenbachdiep@gmail.com</a></li>
+                        <li><a href="#">số 12, Quảng An, Hồ Tây, Hà Nội</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <ul>
+                        <li><h4>VỀ CHÚNG TÔI</h4></li>
+                        <li><a href="@Url.Action("Introduction", "Home")">Giới thiệu</a></li>
+                        <li><a href="@Url.Action("Product", "Home")">Sản phẩm</a></li>
+                        <li><a href="@Url.Action("News", "Home")">Tin tức</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <ul>
+                        <li><h4>LIÊN HỆ</h4></li>
+                        <li>
+                            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                        </li>
+                        <li>
+                            Copyright © 2010-2020 <br />
+                            Tra Sen Bach Diep. All right reserved.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="~/Scripts/mySlick.js"></script>
+</body>
+</html>
